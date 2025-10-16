@@ -2,9 +2,11 @@
 using Common.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyAPIs.Filters;
 
 namespace MyAPIs.Controllers
 {
+    [TypeFilter(typeof(LogRequest))]
     [ApiController]
     [Route("[controller]")]
     public class TransferController : Controller

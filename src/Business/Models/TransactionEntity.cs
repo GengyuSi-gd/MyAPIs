@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Business.Filters;
 using Common.Response;
 
 namespace Business.Models
@@ -23,7 +24,8 @@ namespace Business.Models
 
         #region account info
 
-
+        [DoNotLog]
+        public string AccountNumber { get; set; }
         public AccountResponse AccountResponse { get; set; }
 
         #endregion

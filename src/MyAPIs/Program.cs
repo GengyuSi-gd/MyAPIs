@@ -1,7 +1,11 @@
 
 using Business.Models;
 using Business.Services;
+using Common.Client;
 using Common.Helper;
+using Common.Log;
+using MMS.Common.CheckDeposit.Services;
+using MMS.Service.CheckDeposit.Repository.Common;
 
 namespace MyAPIs
 {
@@ -29,6 +33,22 @@ namespace MyAPIs
 
                 builder.Services.AddTransient<IMethodExecutionHelper<TransactionEntity>, MethodExecutionHelper<TransactionEntity>>();
                 builder.Services.AddTransient<ITransferService, TransferService>();
+
+                #region client
+
+                builder.Services.AddTransient<HttpClientLoggingHandler>();
+                builder.Services.AddHttpClient<IWebApiClient, WebApiClient>(c =>
+                        c.Timeout = TimeSpan.FromMilliseconds(10000))
+                    .AddHttpMessageHandler<HttpClientLoggingHandler>();
+                //services.AddHttpClient("VSoftClient").AddHttpMessageHandler<HttpClientLoggingHandler1>();
+                builder.Services.AddHttpClient<ISoapClient, SoapClient>(c =>
+                        c.Timeout = TimeSpan.FromMilliseconds(10000))
+                    .AddHttpMessageHandler<HttpClientLoggingHandler>();
+
+                #endregion
+
+                builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+                builder.Services.AddHostedService<QueuedHostedService>();
 
                 var app = builder.Build();
 
